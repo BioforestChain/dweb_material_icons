@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "build": "deno run --A build.ts"
+    "build": "deno run -A build.ts"
   },
   "imports": {
     "@dweb-browser/zstd-wasm": "npm:@dweb-browser/zstd-wasm@^0.0.3",

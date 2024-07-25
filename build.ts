@@ -10,24 +10,25 @@ import lightJson from "./vsc-material-theme-icons/out/variants/Material-Theme-Ic
 const buildDir = url.fileURLToPath(
   import.meta.resolve("./build"),
 );
+const debugDir = url.fileURLToPath(
+  import.meta.resolve("./debug"),
+);
 const outDir = url.fileURLToPath(
   import.meta.resolve("./vsc-material-theme-icons/out"),
 );
 const iconsDir = path.join(outDir, "icons");
-import init, { compress } from "@dweb-browser/zstd-wasm";
-// 等待 deno 支持 import bytes
-// import zstd_wasm_binary from "@dweb-browser/zstd-wasm/zstd_wasm_bg.wasm" with {
-//   type: "bytes",
-// };
-const zstd_wasm_binary = Deno.readFileSync("./zstd_wasm_bg.wasm");
-await init(zstd_wasm_binary);
+import { compress } from "./zstd.ts";
 const textEncoder = new TextEncoder();
+const clearDir = (dirname: string) => {
+  if (fs.existsSync(dirname)) {
+    fs.rmSync(dirname, { recursive: true });
+  }
+  fs.mkdirSync(dirname, { recursive: true });
+};
 
 export function buildIcons() {
-  if (fs.existsSync(buildDir)) {
-    fs.rmSync(buildDir, { recursive: true });
-  }
-  fs.mkdirSync(buildDir, { recursive: true });
+  clearDir(debugDir);
+  clearDir(buildDir);
   const bundle = {} as any;
   for (
     const { name, json } of [{ name: "darker", json: darkerJson }, {
@@ -127,18 +128,14 @@ export function buildIcons() {
       folderFullnameMap,
       defaultMap,
     };
-    // fs.writeFileSync(
-    //   path.join(buildDir, name + ".json"),
-    //   textEncoder.encode(JSON.stringify(bundle[name])),
-    // );
+    fs.writeFileSync(
+      path.join(debugDir, name + ".json"),
+      textEncoder.encode(JSON.stringify(bundle[name], null, 2)),
+    );
   }
-  fs.writeFileSync(
-    path.join(buildDir, "bundle.json.zstd"),
-    compress(
-      textEncoder.encode(JSON.stringify(bundle)),
-      10,
-    ),
-  );
+  const binary = compress(textEncoder.encode(JSON.stringify(bundle)), 10);
+  fs.writeFileSync(path.join(buildDir, "bundle.json.zstd"), binary);
+  return { binary, bundle };
 }
 
 // Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
