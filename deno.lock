@@ -1,0 +1,26 @@
+{
+  "version": "3",
+  "packages": {
+    "specifiers": {
+      "npm:@dweb-browser/zstd-wasm": "npm:@dweb-browser/zstd-wasm@0.0.3",
+      "npm:@dweb-browser/zstd-wasm@^0.0.3": "npm:@dweb-browser/zstd-wasm@0.0.3",
+      "npm:@types/node": "npm:@types/node@18.16.19"
+    },
+    "npm": {
+      "@dweb-browser/zstd-wasm@0.0.3": {
+        "integrity": "sha512-FqF4l9hlrqzKTS9zt0PZXAUZthQ8T3aK47xhqx4CcOIawvfE0fvMrrObOJ4/0iCW19GfRSfRcjT1/iuDwQ+18g==",
+        "dependencies": {}
+      },
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
+        "dependencies": {}
+      }
+    }
+  },
+  "remote": {},
+  "workspace": {
+    "dependencies": [
+      "npm:@dweb-browser/zstd-wasm@^0.0.3"
+    ]
+  }
+}
